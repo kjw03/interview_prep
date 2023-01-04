@@ -36,6 +36,7 @@ def estimate_water_trapped(mtn_heights: List[float]) -> float:
     l_peak_elevations: List[float] = [max(mtn_heights[0:idx+1]) for idx in range(len(mtn_heights))]
         
     # Calculate highest peak to the right of each index
+    # Alternative to the negative indexing is using reversed()
     r_peak_elevations: List[float] = [max(mtn_heights[-1:idx:-1]) for idx in range(-len(mtn_heights)-1, -1, 1)]
     
     water_trapped: List[float] = [min(l_peak_elevations[idx], r_peak_elevations[idx]) - mtn_heights[idx]
@@ -55,5 +56,8 @@ def test_estimate_water_trapped(test_input: List[float], expected: float):
     assert abs(estimate_water_trapped(test_input) - expected) < ALLOWED_CALCULATION_ERROR
 
 if __name__ == '__main__':
-    pytest.main()
+    pytest.main(["--durations", "0"])
 
+# Final thoughts:
+# The creation of the left and right peak arrays is inefficient. Can just loop once through the length of
+# mtn_heights, creating the l_peak and r_peak arrays with running max variables.
